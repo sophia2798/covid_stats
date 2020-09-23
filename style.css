@@ -3,37 +3,65 @@ html, body {
 }
 
 body {
-    
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 nav {
     padding: 0 10px;
 }
 
-main {
-    height: 80%;
+.row::after {
+    margin: 1%;
+}
+
+#main-container {
+    /* height: 80%; */
+    flex: 1 0 auto;
+    margin: 0;
 }
 
 #search-card {
     height: 100%;
     background-color: antiquewhite;
-    padding: 10px;
+    padding: 3%;
     /* margin: 10px; */
 }
 
 #results {
-    height: 100%;
+    max-height: 100%;
+    padding: 1% 2%;
 }
 
 footer {
-    position: fixed;
-    bottom: 0;
-    text-align: center;
     width: 100%;
     margin-bottom: 0px;
     background-color: #eee;
+    flex-shrink: 0;
 }
 
 #footer-text {
     margin: 5px;
+    text-align: center;
+}
+
+#stats-graph-container, #testing-list, #county-info {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1%;
+}
+
+#testing-list {
+    margin: 0;
+}
+
+#img-wrapper, td {
+    text-align: center;
+    vertical-align: middle;
+    max-width: 100%;
+}
+
+tr {
+    border: none;
 }
