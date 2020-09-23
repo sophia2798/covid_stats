@@ -69,3 +69,8 @@ footer {
 tr {
     border: none;
 }
+
+.stats-wrapper {
+    display: flex;
+    flex-direction: row;
+}
