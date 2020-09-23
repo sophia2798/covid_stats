@@ -1,11 +1,9 @@
 // Wait for everything is loaded, then execute function
 $(document).ready(function () {
-    var cityName = "";
-    var stateName = "";
     // Once search button is clicked, call storeInput()
 
     displayHistory();
-    $("#search-btn").on("click", storeInput);
+    $("#submit-btn").on("click", storeInput);
 
     function displayHistory() {
 
@@ -36,9 +34,6 @@ $(document).ready(function () {
         cityInput = cityToUpperCase(cityInput);
         stateInput = stateInput.toUpperCase();
 
-        // Set values to global variables
-        cityName = cityInput;
-        stateName = stateInput;
         // console.log("cityInput: ", cityInput);
         // console.log("stateInput: ", stateInput);
 
@@ -93,49 +88,84 @@ $(document).ready(function () {
         return cityUC.trim();
     }
 
-    // Testing Center API Call
-    var testingCenterKey = "aUGtjGfxYZm_i4czjxJiqasqeMEkhvjaRig_VG6cUtA";
-    // Example data, seattle
-    var cityLongitude = -122.33;
-    var cityLatitude = 47.60;
+    $("#submit-btn").on("click", function(event) {
+        event.preventDefault();
 
-    // Limit to 5 results
-    var resultLimit = 5;
-    var testingCenterURL = "https://discover.search.hereapi.com/v1/discover?apikey=" + testingCenterKey + "&q=Covid&at=" + cityLatitude + "," + cityLongitude + "&limit=" + resultLimit;
+        // Assign variables to input values
+        var cityName = $("#city-search").val();
+        var stateName = ($("#state-search").val()).toUpperCase();
 
-    // All results
-    // var testingCenterURL = "https://discover.search.hereapi.com/v1/discover?apikey=" + testingCenterKey + "&q=Covid&at=" + cityLatitude + "," + cityLongitude;
-    var myCountyArray = []; // LC-Declaring Global County array to store county info of 5 testing centers.
-    $.ajax({
-        url: testingCenterURL,
-        method: "GET"
-    }).then(function (testingCenterResponse) {
-        // console.log(testingCenterResponse);
-        for (var i = 0; i < resultLimit; i++) {
-            // console.log(testingCenterResponse.items[i]);
-            // console.log(testingCenterResponse.items[i].title);
-            // console.log(testingCenterResponse.items[i].address.label);
-            // console.log(testingCenterResponse.items[i].contacts[0].phone[0].value);
-            var address = testingCenterResponse.items[i].address.label.split(":")[1];
-            // console.log(address); // ZW - commented it 
-            myCountyArray.push(testingCenterResponse.items[i].title, testingCenterResponse.items[i].address.county);//LC-This will push county information to myCountyArray
-        }
-    });
+        // Testing Center API Call
+        var testingCenterKey = "aUGtjGfxYZm_i4czjxJiqasqeMEkhvjaRig_VG6cUtA";
+        // Example data, seattle
+        var cityLongitude = -122.33;
+        var cityLatitude = 47.60;
 
-    // Health Department API Call
-    var healthDeptURL = "https://postman-data-api-templates.github.io/county-health-departments/api/washington.json";
+        // Limit to 5 results
+        var resultLimit = 5;
+        var testingCenterURL = "https://discover.search.hereapi.com/v1/discover?apikey=" + testingCenterKey + "&q=Covid&at=" + cityLatitude + "," + cityLongitude + "&limit=" + resultLimit;
 
-    $.ajax({
-        url: healthDeptURL,
-        method: "GET"
-    }).then(function (response) {
-        var myArray = response;
-        $.each(myArray, function (index, value) {
-            // console.log(value.name); // ZW - commented it
-            // console.log(value.address); // ZW - commented it 
-            // console.log(value.website); // ZW - commented it 
-        })
-        // ZW - commented it 
-        // console.log("County list: ", myCountyArray);// LC-Proof that county info is now reachable within this ajax request. 
+        // All results
+        // var testingCenterURL = "https://discover.search.hereapi.com/v1/discover?apikey=" + testingCenterKey + "&q=Covid&at=" + cityLatitude + "," + cityLongitude;
+        var myCountyArray = []; // LC-Declaring Global County array to store county info of 5 testing centers.
+        $.ajax({
+            url: testingCenterURL,
+            method: "GET"
+        }).then(function (testingCenterResponse) {
+            // console.log(testingCenterResponse);
+            for (var i = 0; i < resultLimit; i++) {
+                // console.log(testingCenterResponse.items[i]);
+                // console.log(testingCenterResponse.items[i].title);
+                // console.log(testingCenterResponse.items[i].address.label);
+                // console.log(testingCenterResponse.items[i].contacts[0].phone[0].value);
+                var address = testingCenterResponse.items[i].address.label.split(":")[1];
+                // console.log(address); // ZW - commented it 
+                $("#loc"+i).text(address);
+                myCountyArray.push(testingCenterResponse.items[i].title, testingCenterResponse.items[i].address.county);//LC-This will push county information to myCountyArray
+            }
+        });
+
+        // Health Department API Call
+        var healthDeptURL = "https://postman-data-api-templates.github.io/county-health-departments/api/washington.json";
+
+        $.ajax({
+            url: healthDeptURL,
+            method: "GET"
+        }).then(function (response) {
+            var myArray = response;
+            $.each(myArray, function (index, value) {
+                // console.log(value.name); // ZW - commented it
+                // console.log(value.address); // ZW - commented it 
+                // console.log(value.website); // ZW - commented it 
+            })
+            // ZW - commented it 
+            // console.log("County list: ", myCountyArray);// LC-Proof that county info is now reachable within this ajax request. 
+        });
+
+        // State Stats API
+        var stateURL = "https://api.covidtracking.com/v1/states/wa/current.json";
+
+        $.ajax({
+            url: stateURL,
+            method: "GET"
+        }).then(function(response) {
+            // console.log(response);
+            var dateString = response.date;
+            var dateFormat = moment(dateString, "YYYYMMDD").format('MMMM Do YYYY');
+            console.log(dateFormat)
+            var totalTested = response.totalTestResults;
+            var totalPos = response.positive;
+            var totalNeg = response.negative;
+            var currentHosp = response.hospitalizedCurrently;
+            var deaths = response.death;
+            $("#total-tested").text(totalTested);
+            $("#positive").text(totalPos);
+            $("#negative").text(totalNeg);
+            $("#hospitalized").text(currentHosp);
+            $("#deaths").text(deaths);
+            $("#update-date").text(dateFormat);
+            console.log(totalTested,totalPos,totalNeg,currentHosp,deaths);
+        });
+
     });
 });
