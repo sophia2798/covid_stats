@@ -64,7 +64,7 @@ $.ajax({
     // console.log(response);
     var dateString = response.date;
     var dateFormat = moment(dateString, "YYYYMMDD").format('MMMM Do YYYY');
-    console.log(dateFormat)
+    // console.log(dateFormat)
     var totalTested = (response.totalTestResults).toLocaleString('en');
     var totalPos = (response.positive).toLocaleString('en');
     var totalNeg = (response.negative).toLocaleString('en');
@@ -75,6 +75,7 @@ $.ajax({
     $("#negative").text(totalNeg);
     $("#hospitalized").text(currentHosp);
     $("#deaths").text(deaths);
+    $("#update-date").text(dateFormat);
     console.log(totalTested,totalPos,totalNeg,currentHosp,deaths);
 });
 });
