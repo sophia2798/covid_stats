@@ -21,6 +21,10 @@ main {
     /* margin: 10px; */
 }
 
+/* .collection-item {
+    display: none;
+} */
+
 #results {
     height: 100%;
 }
