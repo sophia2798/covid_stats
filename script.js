@@ -1,4 +1,7 @@
 console.log("yeehaw")
+// Global variables for search values 
+var cityName = ($("#city-search").val()).toLowerCase;
+var stateName = ($("#state-search").val()).toLowerCase;
 
 // Testing Center API Call
 var testingCenterKey = "aUGtjGfxYZm_i4czjxJiqasqeMEkhvjaRig_VG6cUtA";
@@ -38,9 +41,28 @@ $.ajax({
 }).then(function (response) {
     var myArray = response;
     $.each(myArray, function (index, value) {
-        console.log(value.name);
-        console.log(value.address);
-        console.log(value.website);
+        // console.log(value.name);
+        // console.log(value.address);
+        // console.log(value.website);
     })
     console.log("County list: ", myCountyArray);// LC-Proof that county info is now reachable within this ajax request.
 });
+
+// State Stats API
+var stateURL = "https://api.covidtracking.com/v1/states/wa/current.json";
+
+$.ajax({
+    url: stateURL,
+    method: "GET"
+}).then(function(response) {
+    // console.log(response);
+    var dateString = response.date;
+    var dateFormat = moment(dateString, "YYYYMMDD").format('MMMM Do YYYY');
+    console.log(dateFormat)
+    var totalTested = response.totalTestResults;
+    var totalPos = response.positive;
+    var totalNeg = response.negative;
+    var currentHosp = response.hospitalizedCurrently;
+    var deaths = response.death;
+    console.log(totalTested,totalPos,totalNeg,currentHosp,deaths);
+})
