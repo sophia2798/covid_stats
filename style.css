@@ -1,7 +1,39 @@
+html, body {
+    height: 100%;
+}
+
 body {
-    background-color: seagreen;
+    
+}
+
+nav {
+    padding: 0 10px;
+}
+
+main {
+    height: 80%;
 }
 
 #search-card {
+    height: 100%;
     background-color: antiquewhite;
+    padding: 10px;
+    /* margin: 10px; */
+}
+
+#results {
+    height: 100%;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 0px;
+    background-color: #eee;
+}
+
+#footer-text {
+    margin: 5px;
 }
