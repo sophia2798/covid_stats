@@ -29,6 +29,10 @@ nav {
     /* margin: 10px; */
 }
 
+/* .collection-item {
+    display: none;
+} */
+
 #results {
     max-height: 100%;
     padding: 1% 2%;
