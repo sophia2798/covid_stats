@@ -1,8 +1,12 @@
 console.log("yeehaw")
-// Global variables for search values 
-var cityName = ($("#city-search").val()).toLowerCase;
-var stateName = ($("#state-search").val()).toLowerCase;
 
+$("#submit-btn").on("click", function(event) {
+event.preventDefault();
+// Variables for search values 
+var cityName = ($("#city-search").val()).toLowerCase();
+var stateName = ($("#state-search").val()).toLowerCase();
+// Clear inputs
+$("input").val("");
 // Testing Center API Call
 var testingCenterKey = "aUGtjGfxYZm_i4czjxJiqasqeMEkhvjaRig_VG6cUtA";
 // Example data, seattle
@@ -65,4 +69,5 @@ $.ajax({
     var currentHosp = response.hospitalizedCurrently;
     var deaths = response.death;
     console.log(totalTested,totalPos,totalNeg,currentHosp,deaths);
-})
+});
+});
