@@ -7,6 +7,7 @@ var cityName = ($("#city-search").val()).toLowerCase();
 var stateName = ($("#state-search").val()).toLowerCase();
 // Clear inputs
 $("input").val("");
+
 // Testing Center API Call
 var testingCenterKey = "aUGtjGfxYZm_i4czjxJiqasqeMEkhvjaRig_VG6cUtA";
 // Example data, seattle
@@ -32,6 +33,7 @@ $.ajax({
         // console.log(testingCenterResponse.items[i].contacts[0].phone[0].value);
         var address = testingCenterResponse.items[i].address.label.split(":")[1];
         console.log(address);
+        $("#loc"+i).text(address);
         myCountyArray.push(testingCenterResponse.items[i].title, testingCenterResponse.items[i].address.county);//LC-This will push county information to myCountyArray
     }
 });
@@ -63,11 +65,16 @@ $.ajax({
     var dateString = response.date;
     var dateFormat = moment(dateString, "YYYYMMDD").format('MMMM Do YYYY');
     console.log(dateFormat)
-    var totalTested = response.totalTestResults;
-    var totalPos = response.positive;
-    var totalNeg = response.negative;
-    var currentHosp = response.hospitalizedCurrently;
-    var deaths = response.death;
+    var totalTested = (response.totalTestResults).toLocaleString('en');
+    var totalPos = (response.positive).toLocaleString('en');
+    var totalNeg = (response.negative).toLocaleString('en');
+    var currentHosp = (response.hospitalizedCurrently).toLocaleString('en');
+    var deaths = (response.death).toLocaleString('en');
+    $("#total-tested").text(totalTested);
+    $("#positive").text(totalPos);
+    $("#negative").text(totalNeg);
+    $("#hospitalized").text(currentHosp);
+    $("#deaths").text(deaths);
     console.log(totalTested,totalPos,totalNeg,currentHosp,deaths);
 });
 });
