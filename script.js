@@ -1,7 +1,8 @@
 // Wait for everything is loaded, then execute function
 $(document).ready(function () {
-    // Once search button is clicked, call storeInput()
+    $('.modal').modal();
 
+    // Once search button is clicked, call storeInput()
     displayHistory();
     $("#submit-btn").on("click", storeInput);
 
@@ -30,6 +31,25 @@ $(document).ready(function () {
         var cityInput = $("#city-search").val().trim();
         var stateInput = $("#state-search").val().trim();
 
+        // Display modal with error messages
+        if (cityInput === "" && stateInput === "") {
+            $("#error-message").text("Please enter a city and a state.");
+
+        } else if (cityInput === "" && stateInput.length > 0) {
+            $("#error-message").text("Please enter a city.");
+
+        } else if (cityInput.length > 0 && stateInput === "") {
+            $("#error-message").text("Please enter a state code.");
+            
+        } else if (cityInput.length > 0 && stateInput.length != 2) {
+            $("#error-message").text("Please enter a correct state code.");
+        }
+
+        $(".modal").show();
+        $(".close").on("click", function () {
+            $(".modal").css("display", "none");
+        });
+
         // Change to uppercase
         cityInput = cityToUpperCase(cityInput);
         stateInput = stateInput.toUpperCase();
@@ -44,7 +64,7 @@ $(document).ready(function () {
         if (storageCityArray.indexOf(cityInput) === -1) {
             // console.log("City not in history");
             // console.log("city array before: " + JSON.stringify(storageCityArray));
-            
+
             if (storageCityArray.length < maxLength) {
 
                 // Set arrays to local storage
@@ -77,7 +97,7 @@ $(document).ready(function () {
         var cityUC = "";
 
         cityToChange = cityToChange.split(" ");
-        console.log(cityToChange);
+        // console.log(cityToChange);
         cityToChange.forEach(function (cityPart) {
             // console.log("before: ", cityPart);
             cityPart = cityPart.charAt(0).toUpperCase() + cityPart.slice(1);
@@ -88,7 +108,7 @@ $(document).ready(function () {
         return cityUC.trim();
     }
 
-    $("#submit-btn").on("click", function(event) {
+    $("#submit-btn").on("click", function (event) {
         event.preventDefault();
         // Assign variables to input values
         var cityName = $("#city-search").val().trim();
@@ -101,6 +121,20 @@ $(document).ready(function () {
         $.ajax({
             url: "http://api.openweathermap.org/data/2.5/weather?q="+cityName+","+fullStateName+"&appid=e0b82fbe866155125ec89e15985f0d60",
             method: "GET"
+<<<<<<< HEAD
+        }).then(function (testingCenterResponse) {
+            // console.log(testingCenterResponse);
+            for (var i = 0; i < resultLimit; i++) {
+                // console.log(testingCenterResponse.items[i]);
+                // console.log(testingCenterResponse.items[i].title);
+                // console.log(testingCenterResponse.items[i].address.label);
+                // console.log(testingCenterResponse.items[i].contacts[0].phone[0].value);
+                var address = testingCenterResponse.items[i].address.label.split(":")[1];
+                // console.log(address); // ZW - commented it 
+                $("#loc" + i).text(address);
+                myCountyArray.push(testingCenterResponse.items[i].title, testingCenterResponse.items[i].address.county);//LC-This will push county information to myCountyArray
+            }
+=======
         }).then(function(response) {
             var cityLatitude = response.coord.lat;
             var cityLongitude = response.coord.lon;
@@ -131,6 +165,7 @@ $(document).ready(function () {
                     myCountyArray.push(testingCenterResponse.items[i].title, testingCenterResponse.items[i].address.county);//LC-This will push county information to myCountyArray
                 }
             });
+>>>>>>> dev
         });
 
         // Health Department API Call
@@ -165,7 +200,7 @@ $(document).ready(function () {
         $.ajax({
             url: stateURL,
             method: "GET"
-        }).then(function(response) {
+        }).then(function (response) {
             // console.log(response);
             var dateString = response.date;
             var dateFormat = moment(dateString, "YYYYMMDD").format('MMMM Do YYYY');
@@ -182,16 +217,16 @@ $(document).ready(function () {
             $("#hospitalized").text(currentHosp);
             $("#deaths").text(deaths);
             $("#update-date").text(dateFormat);
-            console.log(totalTested,totalPos,totalNeg,currentHosp,deaths);
+            console.log(totalTested, totalPos, totalNeg, currentHosp, deaths);
         });
 
     });
 });
 
-var statesArr = { "AL" : "Alabama", "AK" : "Alaska", "AZ" : "Arizona", "AR" : "Arkansas", "CA" : "California", "CO" : "Colorado", "CT" : "Connecticut", "DE" : "Delaware", "GA" : "Georgia", "HI" : "Hawaii", "ID" : "Idaho", "IL" : "Illinois", "IN" : "Indiana", "IA" : "Iowa", "KS" : "Kansas", "KY" : "Kentucky", "LA" : "Louisiana", "ME" : "Maine", "MD" : "Maryland", "MA" : "Massachusetts", "MI" : "Michigan", "MN" : "Minnesota", "MS" : "Mississippi", "MO" : "Missouri", "MT" : "Montana", "NE" : "Nebraska", "NV" : "Nevada", "NH" : "New Hampshire", "NJ" : "New Jersey", "NM" : "New Mexico", "NY" : "New York", "NC" : "North Carolina", "ND" : "North Dakota", "OH" : "Ohio", "OK" : "Oklahoma", "OR" : "Oregon", "PA" : "Pennsylvania", "SC" : "South Carolina", "SD" : "South Dakota", "TN" : "Tennessee", "TX" : "Texas", "UT" : "Utah", "VT" : "Vermont", "VA" : "Virginia", "WA" : "Washington", "WV" : "West Virginia", "WI" : "Wisconsin", "WY" : "Wyoming" }
+var statesArr = { "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming" }
 
 
-var getFullState = function(stateAbbr) {
+var getFullState = function (stateAbbr) {
     return statesArr[stateAbbr]
 
 }
