@@ -134,7 +134,16 @@ $(document).ready(function () {
         });
 
         // Health Department API Call
-        var healthDeptURL = "https://postman-data-api-templates.github.io/county-health-departments/api/"+fullStateName+".json";
+        
+        // Convert state name to all lower case and replace spaces with hyphens is applicable
+        if (fullStateName.indexOf(' ') >= 0) {
+            var healthDeptState = (fullStateName.toLowerCase()).replace(/\s/g, "-");
+        }
+        else {
+            var healthDeptState = fullStateName.toLowerCase();
+        };
+        
+        var healthDeptURL = "https://postman-data-api-templates.github.io/county-health-departments/api/"+healthDeptState+".json";
 
         $.ajax({
             url: healthDeptURL,
@@ -161,11 +170,11 @@ $(document).ready(function () {
             var dateString = response.date;
             var dateFormat = moment(dateString, "YYYYMMDD").format('MMMM Do YYYY');
             console.log(dateFormat)
-            var totalTested = response.totalTestResults;
-            var totalPos = response.positive;
-            var totalNeg = response.negative;
-            var currentHosp = response.hospitalizedCurrently;
-            var deaths = response.death;
+            var totalTested = (response.totalTestResults).toLocaleString('en');
+            var totalPos = (response.positive).toLocaleString('en');
+            var totalNeg = (response.negative).toLocaleString('en');
+            var currentHosp = (response.hospitalizedCurrently).toLocaleString('en');
+            var deaths = (response.death).toLocaleString('en');
             $("#state-name").text(fullStateName);
             $("#total-tested").text(totalTested);
             $("#positive").text(totalPos);
