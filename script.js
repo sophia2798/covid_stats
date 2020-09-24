@@ -205,6 +205,10 @@ $(document).ready(function () {
                 $("#update-date").text(dateFormat);
                 console.log(totalTested, totalPos, totalNeg, currentHosp, deaths);
             });
+<<<<<<< HEAD
+=======
+        });
+>>>>>>> dev
 
         }
 
