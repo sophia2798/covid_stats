@@ -117,108 +117,96 @@ $(document).ready(function () {
         console.log(cityName, stateName, fullStateName)
         $("input").val("");
 
-        // Lon and Lat API Call
-        $.ajax({
-            url: "http://api.openweathermap.org/data/2.5/weather?q="+cityName+","+fullStateName+"&appid=e0b82fbe866155125ec89e15985f0d60",
-            method: "GET"
-<<<<<<< HEAD
-        }).then(function (testingCenterResponse) {
-            // console.log(testingCenterResponse);
-            for (var i = 0; i < resultLimit; i++) {
-                // console.log(testingCenterResponse.items[i]);
-                // console.log(testingCenterResponse.items[i].title);
-                // console.log(testingCenterResponse.items[i].address.label);
-                // console.log(testingCenterResponse.items[i].contacts[0].phone[0].value);
-                var address = testingCenterResponse.items[i].address.label.split(":")[1];
-                // console.log(address); // ZW - commented it 
-                $("#loc" + i).text(address);
-                myCountyArray.push(testingCenterResponse.items[i].title, testingCenterResponse.items[i].address.county);//LC-This will push county information to myCountyArray
-            }
-=======
-        }).then(function(response) {
-            var cityLatitude = response.coord.lat;
-            var cityLongitude = response.coord.lon;
-
-            // Testing Center API Call
-            var testingCenterKey = "aUGtjGfxYZm_i4czjxJiqasqeMEkhvjaRig_VG6cUtA";
-            console.log(cityLongitude, cityLatitude)
-            // Limit to 5 results
-            var resultLimit = 5;
-            var testingCenterURL = "https://discover.search.hereapi.com/v1/discover?apikey=" + testingCenterKey + "&q=Covid&at=" + cityLatitude + "," + cityLongitude + "&limit=" + resultLimit;
-            
-            // All results
-            // var testingCenterURL = "https://discover.search.hereapi.com/v1/discover?apikey=" + testingCenterKey + "&q=Covid&at=" + cityLatitude + "," + cityLongitude;
-            var myCountyArray = []; // LC-Declaring Global County array to store county info of 5 testing centers.
+        if (cityInput.length > 0 && stateInput.length === 2) {
+            // Lon and Lat API Call
             $.ajax({
-                url: testingCenterURL,
+                url: "http://api.openweathermap.org/data/2.5/weather?q="+cityName+","+fullStateName+"&appid=e0b82fbe866155125ec89e15985f0d60",
                 method: "GET"
-            }).then(function (testingCenterResponse) {
-                // console.log(testingCenterResponse);
-                for (var i = 0; i < resultLimit; i++) {
-                    // console.log(testingCenterResponse.items[i]);
-                    // console.log(testingCenterResponse.items[i].title);
-                    // console.log(testingCenterResponse.items[i].address.label);
-                    // console.log(testingCenterResponse.items[i].contacts[0].phone[0].value);
-                    var address = testingCenterResponse.items[i].address.label.split(":")[1];
-                    // console.log(address); // ZW - commented it 
-                    $("#loc"+i).text(address);
-                    myCountyArray.push(testingCenterResponse.items[i].title, testingCenterResponse.items[i].address.county);//LC-This will push county information to myCountyArray
-                }
+            }).then(function(response) {
+                var cityLatitude = response.coord.lat;
+                var cityLongitude = response.coord.lon;
+    
+                // Testing Center API Call
+                var testingCenterKey = "aUGtjGfxYZm_i4czjxJiqasqeMEkhvjaRig_VG6cUtA";
+                console.log(cityLongitude, cityLatitude)
+                // Limit to 5 results
+                var resultLimit = 5;
+                var testingCenterURL = "https://discover.search.hereapi.com/v1/discover?apikey=" + testingCenterKey + "&q=Covid&at=" + cityLatitude + "," + cityLongitude + "&limit=" + resultLimit;
+                
+                // All results
+                // var testingCenterURL = "https://discover.search.hereapi.com/v1/discover?apikey=" + testingCenterKey + "&q=Covid&at=" + cityLatitude + "," + cityLongitude;
+                var myCountyArray = []; // LC-Declaring Global County array to store county info of 5 testing centers.
+                $.ajax({
+                    url: testingCenterURL,
+                    method: "GET"
+                }).then(function (testingCenterResponse) {
+                    // console.log(testingCenterResponse);
+                    for (var i = 0; i < resultLimit; i++) {
+                        // console.log(testingCenterResponse.items[i]);
+                        // console.log(testingCenterResponse.items[i].title);
+                        // console.log(testingCenterResponse.items[i].address.label);
+                        // console.log(testingCenterResponse.items[i].contacts[0].phone[0].value);
+                        var address = testingCenterResponse.items[i].address.label.split(":")[1];
+                        // console.log(address); // ZW - commented it 
+                        $("#loc" + i).text(address);
+                        myCountyArray.push(testingCenterResponse.items[i].title, testingCenterResponse.items[i].address.county);//LC-This will push county information to myCountyArray
+                    }
+                });
             });
->>>>>>> dev
-        });
+    
+            // Health Department API Call
+            
+            // Convert state name to all lower case and replace spaces with hyphens is applicable
+            if (fullStateName.indexOf(' ') >= 0) {
+                var healthDeptState = (fullStateName.toLowerCase()).replace(/\s/g, "-");
+            }
+            else {
+                var healthDeptState = fullStateName.toLowerCase();
+            };
+            
+            var healthDeptURL = "https://postman-data-api-templates.github.io/county-health-departments/api/"+healthDeptState+".json";
+    
+            $.ajax({
+                url: healthDeptURL,
+                method: "GET"
+            }).then(function (response) {
+                var myArray = response;
+                $.each(myArray, function (index, value) {
+                    // console.log(value.name); // ZW - commented it
+                    // console.log(value.address); // ZW - commented it 
+                    // console.log(value.website); // ZW - commented it 
+                })
+                // ZW - commented it 
+                // console.log("County list: ", myCountyArray);// LC-Proof that county info is now reachable within this ajax request. 
+            });
+    
+            // State Stats API
+            var stateURL = "https://api.covidtracking.com/v1/states/"+stateName+"/current.json";
+    
+            $.ajax({
+                url: stateURL,
+                method: "GET"
+            }).then(function (response) {
+                // console.log(response);
+                var dateString = response.date;
+                var dateFormat = moment(dateString, "YYYYMMDD").format('MMMM Do YYYY');
+                console.log(dateFormat)
+                var totalTested = (response.totalTestResults).toLocaleString('en');
+                var totalPos = (response.positive).toLocaleString('en');
+                var totalNeg = (response.negative).toLocaleString('en');
+                var currentHosp = (response.hospitalizedCurrently).toLocaleString('en');
+                var deaths = (response.death).toLocaleString('en');
+                $("#state-name").text(fullStateName);
+                $("#total-tested").text(totalTested);
+                $("#positive").text(totalPos);
+                $("#negative").text(totalNeg);
+                $("#hospitalized").text(currentHosp);
+                $("#deaths").text(deaths);
+                $("#update-date").text(dateFormat);
+                console.log(totalTested, totalPos, totalNeg, currentHosp, deaths);
+            });
 
-        // Health Department API Call
-        
-        // Convert state name to all lower case and replace spaces with hyphens is applicable
-        if (fullStateName.indexOf(' ') >= 0) {
-            var healthDeptState = (fullStateName.toLowerCase()).replace(/\s/g, "-");
         }
-        else {
-            var healthDeptState = fullStateName.toLowerCase();
-        };
-        
-        var healthDeptURL = "https://postman-data-api-templates.github.io/county-health-departments/api/"+healthDeptState+".json";
-
-        $.ajax({
-            url: healthDeptURL,
-            method: "GET"
-        }).then(function (response) {
-            var myArray = response;
-            $.each(myArray, function (index, value) {
-                // console.log(value.name); // ZW - commented it
-                // console.log(value.address); // ZW - commented it 
-                // console.log(value.website); // ZW - commented it 
-            })
-            // ZW - commented it 
-            // console.log("County list: ", myCountyArray);// LC-Proof that county info is now reachable within this ajax request. 
-        });
-
-        // State Stats API
-        var stateURL = "https://api.covidtracking.com/v1/states/"+stateName+"/current.json";
-
-        $.ajax({
-            url: stateURL,
-            method: "GET"
-        }).then(function (response) {
-            // console.log(response);
-            var dateString = response.date;
-            var dateFormat = moment(dateString, "YYYYMMDD").format('MMMM Do YYYY');
-            console.log(dateFormat)
-            var totalTested = (response.totalTestResults).toLocaleString('en');
-            var totalPos = (response.positive).toLocaleString('en');
-            var totalNeg = (response.negative).toLocaleString('en');
-            var currentHosp = (response.hospitalizedCurrently).toLocaleString('en');
-            var deaths = (response.death).toLocaleString('en');
-            $("#state-name").text(fullStateName);
-            $("#total-tested").text(totalTested);
-            $("#positive").text(totalPos);
-            $("#negative").text(totalNeg);
-            $("#hospitalized").text(currentHosp);
-            $("#deaths").text(deaths);
-            $("#update-date").text(dateFormat);
-            console.log(totalTested, totalPos, totalNeg, currentHosp, deaths);
-        });
 
     });
 });
