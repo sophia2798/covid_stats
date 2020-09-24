@@ -121,20 +121,6 @@ $(document).ready(function () {
         $.ajax({
             url: "http://api.openweathermap.org/data/2.5/weather?q="+cityName+","+fullStateName+"&appid=e0b82fbe866155125ec89e15985f0d60",
             method: "GET"
-<<<<<<< HEAD
-        }).then(function (testingCenterResponse) {
-            // console.log(testingCenterResponse);
-            for (var i = 0; i < resultLimit; i++) {
-                // console.log(testingCenterResponse.items[i]);
-                // console.log(testingCenterResponse.items[i].title);
-                // console.log(testingCenterResponse.items[i].address.label);
-                // console.log(testingCenterResponse.items[i].contacts[0].phone[0].value);
-                var address = testingCenterResponse.items[i].address.label.split(":")[1];
-                // console.log(address); // ZW - commented it 
-                $("#loc" + i).text(address);
-                myCountyArray.push(testingCenterResponse.items[i].title, testingCenterResponse.items[i].address.county);//LC-This will push county information to myCountyArray
-            }
-=======
         }).then(function(response) {
             var cityLatitude = response.coord.lat;
             var cityLongitude = response.coord.lon;
@@ -165,7 +151,6 @@ $(document).ready(function () {
                     myCountyArray.push(testingCenterResponse.items[i].title, testingCenterResponse.items[i].address.county);//LC-This will push county information to myCountyArray
                 }
             });
->>>>>>> dev
         });
 
         // Health Department API Call
