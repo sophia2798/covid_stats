@@ -45,7 +45,7 @@ $(document).ready(function () {
             $("#error-message").text("Please enter a correct state code.");
         }
 
-        $(".modal").show();
+        $(".error-modal").show();
         $(".close").on("click", function () {
             $(".modal").css("display", "none");
         });
@@ -118,7 +118,7 @@ $(document).ready(function () {
         console.log(cityName, stateName, fullStateName)
         $("input").val("");
 
-        if (cityInput.length > 0 && stateInput.length === 2) {
+        if (cityName.length > 0 && stateName.length === 2) {
             // Lon and Lat API Call
             $.ajax({
                 url: "http://api.openweathermap.org/data/2.5/weather?q="+cityName+","+fullStateName+"&appid=e0b82fbe866155125ec89e15985f0d60",
@@ -208,9 +208,6 @@ $(document).ready(function () {
             });
 
         }
-        else {
-            var healthDeptState = fullStateName.toLowerCase();
-        };
         
         var healthDeptURL = "https://postman-data-api-templates.github.io/county-health-departments/api/"+healthDeptState+".json";
 
@@ -365,7 +362,7 @@ var getFullState = function (stateAbbr) {
 // Graph Modal Controls
 $(".modal-trigger").on("click", function(event) {
     event.preventDefault();
-    $(".modal").show();
+    $(".graph-modal").show();
 });
 $(".modal-close").click(function() {
     $(".modal").hide();
