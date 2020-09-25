@@ -145,6 +145,7 @@ $(document).ready(function () {
 
     function ajaxCalls(cityName, stateName, fullStateName) {
         // Lon and Lat API Call
+        console.log(cityName,stateName,fullStateName);
         $.ajax({
             url: "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "," + fullStateName + "&appid=e0b82fbe866155125ec89e15985f0d60",
             method: "GET"
@@ -199,6 +200,7 @@ $(document).ready(function () {
                             $("#county-address").text(countyEl.address);
                             $("#county-url").text("Website");
                             $("#county-url").attr("href", countyEl.website);
+                            $("#county-url").attr("target", "blank");
                         }
                     });
                 });
@@ -253,18 +255,18 @@ $(document).ready(function () {
                 }
                 return avgArr;
             };
-
-            var m1 = monthly(0, 29);
-            var m2 = monthly(30, 59);
-            var m3 = monthly(60, 89);
-            var m4 = monthly(90, 119);
-            var m5 = monthly(120, 149);
-            var m6 = monthly(150, 179);
-            var nest = [m1, m2, m3, m4, m5, m6];
-
-            function categorize(cat, index) {
-                for (var j = 0; j < 6; j++) {
-                    cat.unshift(nest[j][index]);
+    
+            var m1 = monthly(0,29);
+            var m2 = monthly(30,59);
+            var m3 = monthly(60,89);
+            var m4 = monthly(90,119);
+            var m5 = monthly(120,149);
+            var m6 = monthly(150,179);
+            var nest = [m1,m2,m3,m4,m5,m6];
+    
+            function categorize(cat,index) {
+                for (var j=0;j<6;j++) {
+                    cat.push(nest[j][index]);
                 }
                 return cat;
             }
