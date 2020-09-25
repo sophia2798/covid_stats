@@ -64,9 +64,9 @@ nav {
     cursor: pointer;
 }
 
-.collection-item {
+/* .collection-item {
     display: none;
-}
+} */
 
 #results {
     /* max-height: 100%; */
@@ -93,6 +93,7 @@ footer {
 
 #testing-list {
     margin: 0;
+    padding: 1% 2%;
 }
 
 #img-wrapper, td {
@@ -114,6 +115,7 @@ tr {
 
 #county-info {
     margin-bottom: 0;
+    padding: 1% 2%;
 }
 
 .us-covid {
@@ -141,3 +143,9 @@ tr {
     width: 75%;
     margin-top: 10%;
 }
+
+#loc0, #loc1, #loc2, #loc3, #loc4 {
+    border-bottom: none;
+    padding-left: 0;
+}
+

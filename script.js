@@ -113,6 +113,7 @@ $(document).ready(function () {
 
     function ajaxCalls(cityName, stateName, fullStateName) {
         // Lon and Lat API Call
+        console.log(cityName,stateName,fullStateName);
         $.ajax({
             url: "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "," + fullStateName + "&appid=e0b82fbe866155125ec89e15985f0d60",
             method: "GET"
@@ -240,7 +241,7 @@ $(document).ready(function () {
     
             function categorize(cat,index) {
                 for (var j=0;j<6;j++) {
-                    cat.unshift(nest[j][index]);
+                    cat.push(nest[j][index]);
                 }
                 return cat;
             }
