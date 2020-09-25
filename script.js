@@ -184,6 +184,7 @@ $(document).ready(function () {
                             $("#county-address").text(countyEl.address);
                             $("#county-url").text("Website");
                             $("#county-url").attr("href", countyEl.website);
+                            $("#county-url").attr("target", "blank");
                         }
                     });
                 });
