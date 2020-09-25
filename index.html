@@ -60,7 +60,7 @@
         </aside>
         <section class="col s8" id="results">
             <div class="row" id="stats-graph-container">
-                <article class="col s4" id="state-stats">
+                <article class="col s12" id="state-stats">
                     <h6 id="state-name">Washington</h6>
                     <div class="stats-wrapper">
                         <p>Total Tested: &nbsp</p>
@@ -86,14 +86,7 @@
                         <p>Last Updated: &nbsp</p>
                         <p id="update-date">September 19th 2020</p>
                     </div>
-                </article>
-                <article class="col s8" id="graph">
-                    <table id="img-wrapper">
-                        <tr>
-                            <td><img src="https://placekitten.com/400/200" alt="covid graph"></td>
-                        </tr>
-                    </table>
-
+                    <a class="waves-effect waves-light btn modal-trigger" style="display:none" href="#modal1">Click to View Graph of Historical Data</a>
                 </article>
             </div>
             <article class="row" id="testing-centers">
@@ -122,12 +115,23 @@
             </section>
         </section>
     </main>
+    <!--Graph Modal-->
+    <div id="modal1" class="modal graph-modal" style="display:none">
+        <div class="modal-content">
+            <!--Graph-->
+            <canvas id="myLineChart" width="200" height="100"></canvas>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
+    </div>
     <footer>
         <p id="footer-text"><small>Created by Larry Cessna, Zhouyi Wang, Wesley McMilan, and Sophia Jung</small></p>
     </footer>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="script.js"></script>
 </body>
 

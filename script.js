@@ -110,6 +110,7 @@ $(document).ready(function () {
 
     $("#submit-btn").on("click", function (event) {
         event.preventDefault();
+        $(".modal-trigger").show();
         // Assign variables to input values
         var cityName = $("#city-search").val().trim();
         var stateName = ($("#state-search").val()).toUpperCase();
@@ -202,7 +203,104 @@ $(document).ready(function () {
             $("#hospitalized").text(currentHosp);
             $("#deaths").text(deaths);
             $("#update-date").text(dateFormat);
-            console.log(totalTested, totalPos, totalNeg, currentHosp, deaths);
+        });
+
+        // Create Graph
+        $.ajax({
+            url: "https://api.covidtracking.com/v1/states/"+stateName+"/daily.json",
+            method: "GET"
+        }).then(function(response){
+            var neg = 0;
+            var pos = 0;
+            var dead = 0;
+            var negPts = [];
+            var posPts = [];
+            var deadPts = [];
+            var months = [];
+            function monthly(start,end) {
+                for (var i=start; i<end; i++) {
+                    neg += parseInt(response[i].positiveIncrease);
+                    pos += parseInt(response[i].positive);
+                    dead += parseInt(response[i].death);
+                    var negAvg = (neg/30).toFixed(0);
+                    var posAvg = ((pos/30)/10).toFixed(0);
+                    var deadAvg = (dead/30).toFixed(0);
+                    var avgArr = [negAvg, posAvg, deadAvg];
+                }
+                return avgArr;
+            };
+    
+            var m1 = monthly(0,29);
+            var m2 = monthly(30,59);
+            var m3 = monthly(60,89);
+            var m4 = monthly(90,119);
+            var m5 = monthly(120,149);
+            var m6 = monthly(150,179);
+            var nest = [m1,m2,m3,m4,m5,m6];
+    
+            function categorize(cat,index) {
+                for (var j=0;j<6;j++) {
+                    cat.unshift(nest[j][index]);
+                }
+                return cat;
+            }
+    
+            negPts = categorize(negPts,0);
+            posPts = categorize(posPts,1);
+            deadPts = categorize(deadPts,2);
+            // console.log(negPts,posPts,deadPts);
+    
+            function lastSixMonths() {
+                var current = moment().format('MMMM');
+                months.push(current);
+                for (var k=1;k<6;k++) {
+                    var prvMonth = moment().subtract(k, 'months').format('MMMM');
+                    months.unshift(prvMonth);
+                }
+                return months;
+            }
+    
+            var ctx = document.getElementById("myLineChart");
+            var myLineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Total Positive Cases (x10)',
+                        data: posPts,
+                        backgroundColor: 'rgba(218,11,11,1)',
+                        borderColor: 'rgba(218,11,11,1)',
+                        fill: false
+                    }, {
+                        label: 'Average Daily Increase in Positive Cases',
+                        data: negPts,
+                        backgroundColor: 'rgba(33,179,20,1)',
+                        borderColor: 'rgba(33,179,20,1)',
+                        fill: false
+                    }, {
+                        label: 'Total Deaths',
+                        data: deadPts,
+                        backgroundColor: 'rgba(86,24,220,1)',
+                        borderColor: 'rgba(86,24,220,1)',
+                        fill: false
+                    }]
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: 'category',
+                            labels: lastSixMonths(),
+                        }]
+                    },
+                    title: {
+                        display: true,
+                        text: 'Historic State COVID-19 Data (6-Months)'
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            });
+            
         });
 
     });
@@ -215,3 +313,12 @@ var getFullState = function (stateAbbr) {
     return statesArr[stateAbbr]
 
 }
+
+// Graph Modal Controls
+$(".modal-trigger").on("click", function(event) {
+    event.preventDefault();
+    $(".modal").show();
+});
+$(".modal-close").click(function() {
+    $(".modal").hide();
+});

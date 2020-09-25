@@ -107,6 +107,8 @@ tr {
 .stats-wrapper {
     display: flex;
     flex-direction: row;
+    text-align: center;
+    margin: 0 auto;
 }
 
 #county-info {
@@ -119,4 +121,22 @@ tr {
 
 #about-us {
     font-size: large;
+}
+
+#state-stats {
+    text-align: center;
+}
+
+.stats-wrapper p {
+    margin: 2% 0 2% auto;
+}
+
+#total-tested, #positive, #negative, #hospitalized, #deaths, #update-date {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+.graph-modal {
+    width: 75%;
+    margin-top: 10%;
 }
