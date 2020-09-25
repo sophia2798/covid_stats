@@ -17,6 +17,14 @@ $(document).ready(function () {
     });
 
     $("#submit-btn").on("click", storeInput);
+    $("#clear-btn").on("click", function () {
+        var numCities = JSON.parse(localStorage.getItem("storageCity")).length;
+        localStorage.clear();
+        for (var i = 0; i < numCities; i++) {
+            $("#hist" + i).text("");
+        }
+
+    });
 
     function displayHistory() {
 
@@ -29,7 +37,7 @@ $(document).ready(function () {
 
         // Display local storage city and state to history, format: Seattle, WA
         storageCityArray.forEach(function (cityEl, index) {
-            $("#hist" + index).css("display", "block");
+            // $("#hist" + index).css("display", "block");
             $("#hist" + index).text(cityEl + ", " + storageStateArray[index]);
             // console.log("check display");
 
@@ -143,7 +151,7 @@ $(document).ready(function () {
                     // console.log(testingCenterResponse.items[i].contacts[0].phone[0].value);
                     var address = testingCenterResponse.items[i].address.label.split(":")[1];
                     // console.log(address); // ZW - commented it 
-                    $("#loc" + i).css("display", "block");
+                    // $("#loc" + i).css("display", "block");
                     $("#loc" + i).text(address);
 
                     // myCountyArray.push(testingCenterResponse.items[i].title, testingCenterResponse.items[i].address.county);//LC-This will push county information to myCountyArray
@@ -208,9 +216,9 @@ $(document).ready(function () {
         });
 
         $.ajax({
-            url: "https://api.covidtracking.com/v1/states/"+stateName+"/daily.json",
+            url: "https://api.covidtracking.com/v1/states/" + stateName + "/daily.json",
             method: "GET"
-        }).then(function(response){
+        }).then(function (response) {
             var neg = 0;
             var pos = 0;
             var dead = 0;
@@ -218,14 +226,14 @@ $(document).ready(function () {
             var posPts = [];
             var deadPts = [];
             var months = [];
-            function monthly(start,end) {
-                for (var i=start; i<end; i++) {
+            function monthly(start, end) {
+                for (var i = start; i < end; i++) {
                     neg += parseInt(response[i].positiveIncrease);
                     pos += parseInt(response[i].positive);
                     dead += parseInt(response[i].death);
-                    var negAvg = (neg/30).toFixed(0);
-                    var posAvg = ((pos/30)/10).toFixed(0);
-                    var deadAvg = (dead/30).toFixed(0);
+                    var negAvg = (neg / 30).toFixed(0);
+                    var posAvg = ((pos / 30) / 10).toFixed(0);
+                    var deadAvg = (dead / 30).toFixed(0);
                     var avgArr = [negAvg, posAvg, deadAvg];
                 }
                 return avgArr;
@@ -245,22 +253,22 @@ $(document).ready(function () {
                 }
                 return cat;
             }
-    
-            negPts = categorize(negPts,0);
-            posPts = categorize(posPts,1);
-            deadPts = categorize(deadPts,2);
+
+            negPts = categorize(negPts, 0);
+            posPts = categorize(posPts, 1);
+            deadPts = categorize(deadPts, 2);
             // console.log(negPts,posPts,deadPts);
-    
+
             function lastSixMonths() {
                 var current = moment().format('MMMM');
                 months.push(current);
-                for (var k=1;k<6;k++) {
+                for (var k = 1; k < 6; k++) {
                     var prvMonth = moment().subtract(k, 'months').format('MMMM');
                     months.unshift(prvMonth);
                 }
                 return months;
             }
-    
+
             var ctx = document.getElementById("myLineChart");
             var myLineChart = new Chart(ctx, {
                 type: 'line',
@@ -301,8 +309,8 @@ $(document).ready(function () {
                     }
                 }
             });
-        
-        });    
+
+        });
     }
 
     // Function input: city to be changed to uppercase
@@ -337,7 +345,7 @@ $(document).ready(function () {
         }
     });
 
-    
+
 });
 
 var statesArr = { "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming" }
@@ -349,12 +357,12 @@ function getFullState(stateAbbr) {
 //     return statesArr[stateAbbr]
 
 //  Graph Modal Controls
-$(".modal-trigger").on("click", function(event) {
+$(".modal-trigger").on("click", function (event) {
     event.preventDefault();
     $(".graph-modal").show();
 });
 
 
-$(".modal-close").click(function() {
+$(".modal-close").click(function () {
     $(".modal").hide();
 });
