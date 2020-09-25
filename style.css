@@ -1,0 +1,187 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+nav {
+    padding: 0 10px;
+}
+
+.row::after {
+    margin: 1%;
+}
+
+#main-container {
+    /* height: 80%; */
+    flex: 1 0 auto;
+    margin: 0;
+}
+
+#search-card {
+    height: 100%;
+    background-color: antiquewhite;
+    padding: 3%;
+    /* margin: 10px; */
+}
+
+/* Modal */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; 
+    z-index: 1; /* Sit on top */
+    padding: 0;
+    width: 25%; /* Full width */
+    overflow: auto; 
+}
+
+  /* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* .collection-item {
+    display: none;
+} */
+
+#results {
+    /* max-height: 100%; */
+    padding: 1% 2%;
+}
+
+footer {
+    width: 100%;
+    margin-bottom: 0px;
+    background-color: #eee;
+    flex-shrink: 0;
+}
+
+#footer-text {
+    margin: 5px;
+    text-align: center;
+}
+
+#stats-graph-container, #testing-list, #county-info {
+    border: 1px solid #666;
+    border-radius: 5px;
+    padding: 1%;
+}
+
+#testing-list {
+    margin: 0;
+    padding: 1% 2%;
+}
+
+#img-wrapper, td {
+    text-align: center;
+    vertical-align: middle;
+    max-width: 100%;
+}
+
+tr {
+    border: none;
+}
+
+.stats-wrapper {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    margin: 0 auto;
+}
+
+#county-info {
+    margin-bottom: 0;
+    padding: 1% 2%;
+}
+
+.us-covid {
+    font-size: 45px;
+}
+
+#about-us {
+    font-size: large;
+}
+
+#state-stats {
+    text-align: center;
+}
+
+.stats-wrapper p {
+    margin: 2% 0 2% auto;
+}
+
+#total-tested, #positive, #negative, #hospitalized, #deaths, #update-date {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+.graph-modal {
+    width: 75%;
+    margin-top: 10%;
+}
+
+#loc0, #loc1, #loc2, #loc3, #loc4 {
+    border-bottom: none;
+    padding-left: 0;
+}
+
+#larry-title {
+    color: navy;
+}
+
+h5 {
+    font-weight: bold;
+}
+
+#clear-btn, #submit-btn {
+    box-shadow:inset 0px 1px 0px 0px #dcecfb;
+	background:linear-gradient(to bottom, #bddbfa 5%, #80b5ea 100%);
+	background-color:#bddbfa;
+	border-radius:6px;
+	border:1px solid #84bbf3;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #528ecc
+}
+
+#clear-btn:hover, #submit-btn:hover {
+    background:linear-gradient(to bottom, #80b5ea 5%, #bddbfa 100%);
+	background-color:#80b5ea;
+}
+
+#county-url:hover {
+    color: darkblue;
+}
+
+.card-content {
+    height: 200px;
+    overflow: hidden;
+}
