@@ -1,52 +1,78 @@
 // Wait for everything is loaded, then execute function
 $(document).ready(function () {
+    // Call modal
     $('.modal').modal();
 
-    // Once search button is clicked, call storeInput()
+    // Display city history on loading
     displayHistory();
+
+    // When user clicks city, state in history, display info regarding that city and state
     $(document).on("click", ".collection-item", function (event) {
         event.preventDefault();
 
-        // Get user input
-        cityID = event.target.id;
-        cityIndex = cityID[cityID.length - 1];
-        cityName = JSON.parse(localStorage.getItem("storageCity"))[cityIndex];
-        stateName = JSON.parse(localStorage.getItem("storageState"))[cityIndex];
-        // console.log(cityName, stateName);
+        // Get the ID of city that user clicks
+        var cityID = event.target.id;
+
+        // Look in local storage for the paired state
+        var cityIndex = cityID[cityID.length - 1];
+
+        // Get city and state from local storage
+        var cityName = JSON.parse(localStorage.getItem("storageCity"))[cityIndex];
+        var stateName = JSON.parse(localStorage.getItem("storageState"))[cityIndex];
+
+        // Call APIs
         ajaxCalls(cityName, stateName, getFullState(stateName));
     });
 
+    // When user clicks the search button, call storeInput()
     $("#submit-btn").on("click", storeInput);
+
+    //
+    $("#submit-btn").on("click", function (event) {
+        event.preventDefault();
+        // Assign variables to input values
+        var cityName = ($("#city-search").val()).toLowerCase().trim();
+        var stateName = ($("#state-search").val()).toUpperCase();
+        var fullStateName = getFullState(stateName);
+        // console.log(cityName, stateName, fullStateName)
+        $("input").val("");
+
+        if (cityName.length > 0 && stateName.length === 2) {
+            $(".modal-trigger").show();
+            ajaxCalls(cityName, stateName, fullStateName);
+        }
+    });
+
+    // When user clicks the clear button, clear search history
     $("#clear-btn").on("click", function () {
+
         var numCities = JSON.parse(localStorage.getItem("storageCity")).length;
         localStorage.clear();
+
         for (var i = 0; i < numCities; i++) {
-            $("#hist" + i).text("");
+            // Display only placeholder
+            $("#hist" + i).html("&nbsp");
         }
 
     });
-
+    
     function displayHistory() {
 
         // Check if local storage is empty
         var storageCityArray = JSON.parse(localStorage.getItem("storageCity")) || [];
         var storageStateArray = JSON.parse(localStorage.getItem("storageState")) || [];
 
-        // console.log(storageCityArray);
-        // console.log(storageStateArray);
-
         // Display local storage city and state to history, format: Seattle, WA
         storageCityArray.forEach(function (cityEl, index) {
             // $("#hist" + index).css("display", "block");
             $("#hist" + index).text(cityEl + ", " + storageStateArray[index]);
-            // console.log("check display");
-
         });
+
     }
 
     function storeInput(event) {
+
         event.preventDefault();
-        // console.log("search btn clicked");
 
         var maxLength = 5;
         // Check input validity
@@ -69,46 +95,44 @@ $(document).ready(function () {
         } else if (cityInput.length > 0 && stateInput.length != 2) {
             $("#error-message").text("Please enter a correct state code.");
             displayModal();
-        }
-
-        // Change to uppercase
-        cityInput = cityToUpperCase(cityInput);
-        stateInput = stateInput.toUpperCase();
-
-        // console.log("cityInput: ", cityInput);
-        // console.log("stateInput: ", stateInput);
-
-        var storageCityArray = JSON.parse(localStorage.getItem("storageCity")) || [];
-        var storageStateArray = JSON.parse(localStorage.getItem("storageState")) || [];
-
-        // TODO: check city state pair instead of just city
-        if (storageCityArray.indexOf(cityInput) === -1) {
-            // console.log("City not in history");
-            // console.log("city array before: " + JSON.stringify(storageCityArray));
-
-            if (storageCityArray.length < maxLength) {
-
-                // Set arrays to local storage
-                storageCityArray.push(cityInput);
-                storageStateArray.push(stateInput);
-
-            } else {
-
-                storageCityArray.shift();
-                storageStateArray.shift();
-                storageCityArray.push(cityInput);
-                storageStateArray.push(stateInput);
-
-            }
-            localStorage.setItem("storageCity", JSON.stringify(storageCityArray));
-            localStorage.setItem("storageState", JSON.stringify(storageStateArray));
-            displayHistory();
-
         } else {
-            // console.log("City in history");
-            // Call API to display info but dont append to history
+            // Change to uppercase
+            cityInput = cityToUpperCase(cityInput);
+            stateInput = stateInput.toUpperCase();
+
+            var storageCityArray = JSON.parse(localStorage.getItem("storageCity")) || [];
+            var storageStateArray = JSON.parse(localStorage.getItem("storageState")) || [];
+            
+            // If the user input is not in city history
+            if (storageCityArray.indexOf(cityInput) === -1) {
+                
+                // If the length of city array is less than max allowable length
+                if (storageCityArray.length < maxLength) {
+    
+                    // Add city and state to the end of array
+                    storageCityArray.push(cityInput);
+                    storageStateArray.push(stateInput);
+    
+                } else {
+                    
+                    // Otherwise delete the first city, state then add input to the end of array
+                    storageCityArray.shift();
+                    storageStateArray.shift();
+                    storageCityArray.push(cityInput);
+                    storageStateArray.push(stateInput);
+    
+                }
+
+                // Set the new array to local storage
+                localStorage.setItem("storageCity", JSON.stringify(storageCityArray));
+                localStorage.setItem("storageState", JSON.stringify(storageStateArray));
+                
+                displayHistory();
+    
+            } 
 
         }
+
 
     }
 
@@ -130,31 +154,23 @@ $(document).ready(function () {
 
             // Testing Center API Call
             var testingCenterKey = "aUGtjGfxYZm_i4czjxJiqasqeMEkhvjaRig_VG6cUtA";
-            // console.log(cityLongitude, cityLatitude)
-            // Limit to 5 results
-            var resultLimit = 5;
+            var resultLimit = 5;  // Limit to 5 results
             var testingCenterURL = "https://discover.search.hereapi.com/v1/discover?apikey=" + testingCenterKey + "&q=Covid&at=" + cityLatitude + "," + cityLongitude + "&limit=" + resultLimit;
 
-            // All results
-            // var testingCenterURL = "https://discover.search.hereapi.com/v1/discover?apikey=" + testingCenterKey + "&q=Covid&at=" + cityLatitude + "," + cityLongitude;
-            var myCountyArray = []; // LC-Declaring Global County array to store county info of 5 testing centers.
             $.ajax({
                 url: testingCenterURL,
                 method: "GET"
             }).then(function (testingCenterResponse) {
-                // console.log(testingCenterResponse);
+
                 for (var i = 0; i < resultLimit; i++) {
-                    // console.log(testingCenterResponse.items[i]);
-                    // console.log(testingCenterResponse.items[i].title);
-                    // console.log(testingCenterResponse.items[i].address.label);
-                    // console.log(testingCenterResponse.items[i].contacts[0].phone[0].value);
+
                     var address = testingCenterResponse.items[i].address.label.split(":")[1];
-                    // console.log(address); // ZW - commented it 
+
                     // $("#loc" + i).css("display", "block");
                     $("#loc" + i).text(address);
 
-                    // myCountyArray.push(testingCenterResponse.items[i].title, testingCenterResponse.items[i].address.county);//LC-This will push county information to myCountyArray
                 }
+
                 var countyName = testingCenterResponse.items[0].address.county;
 
                 // Health Department API Call
@@ -329,22 +345,6 @@ $(document).ready(function () {
         return cityUC.trim();
     }
 
-    $("#submit-btn").on("click", function (event) {
-        event.preventDefault();
-        // Assign variables to input values
-        var cityName = ($("#city-search").val()).toLowerCase().trim();
-        var stateName = ($("#state-search").val()).toUpperCase();
-        var fullStateName = getFullState(stateName);
-        // console.log(cityName, stateName, fullStateName)
-        $("input").val("");
-
-        if (cityName.length > 0 && stateName.length === 2) {
-            $(".modal-trigger").show();
-            ajaxCalls(cityName, stateName, fullStateName);
-        }
-    });
-
-
 });
 
 var statesArr = { "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming" }
@@ -352,15 +352,12 @@ var statesArr = { "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkan
 function getFullState(stateAbbr) {
     return statesArr[stateAbbr]
 }
-// var getFullState = function (stateAbbr) {
-//     return statesArr[stateAbbr]
 
 //  Graph Modal Controls
 $(".modal-trigger").on("click", function (event) {
     event.preventDefault();
     $(".graph-modal").show();
 });
-
 
 $(".modal-close").click(function () {
     $(".modal").hide();
