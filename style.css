@@ -64,9 +64,9 @@ nav {
     cursor: pointer;
 }
 
-.collection-item {
+/* .collection-item {
     display: none;
-}
+} */
 
 #results {
     /* max-height: 100%; */
