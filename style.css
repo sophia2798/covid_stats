@@ -180,3 +180,8 @@ h5 {
 #county-url:hover {
     color: darkblue;
 }
+
+.card-content {
+    height: 200px;
+    overflow: hidden;
+}
