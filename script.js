@@ -9,7 +9,7 @@ $(document).ready(function () {
     // When user clicks city, state in history, display info regarding that city and state
     $(document).on("click", ".collection-item", function (event) {
         event.preventDefault();
-
+        $(".modal-trigger").show();
         // Get the ID of city that user clicks
         var cityID = event.target.id;
 
@@ -168,7 +168,7 @@ $(document).ready(function () {
                     var address = testingCenterResponse.items[i].address.label.split(":")[1];
 
                     // $("#loc" + i).css("display", "block");
-                    $("#loc" + i).text(address);
+                    $("#loc" + i).html("<span><i class='tiny material-icons'>add_location</i></span>&nbsp"+address);
 
                 }
 
