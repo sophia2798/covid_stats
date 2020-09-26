@@ -197,7 +197,7 @@ $(document).ready(function () {
                             // Display county info
                             $("#county-name").text(countyEl.name);
                             $("#phone-number").text(countyEl.phone);
-                            $("#county-address").attr("href",countyEl.address);
+                            $("#county-address").text(countyEl.address);
                             $("#county-url").text("Website");
                             $("#county-url").attr("href", countyEl.website);
                             $("#county-url").attr("target", "blank");
