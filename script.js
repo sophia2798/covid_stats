@@ -9,7 +9,7 @@ $(document).ready(function () {
     // When user clicks city, state in history, display info regarding that city and state
     $(document).on("click", ".collection-item", function (event) {
         event.preventDefault();
-
+        $(".modal-trigger").show();
         // Get the ID of city that user clicks
         var cityID = event.target.id;
 
@@ -197,7 +197,7 @@ $(document).ready(function () {
                             // Display county info
                             $("#county-name").text(countyEl.name);
                             $("#phone-number").text(countyEl.phone);
-                            $("#county-address").text(countyEl.address);
+                            $("#county-address").attr("href",countyEl.address);
                             $("#county-url").text("Website");
                             $("#county-url").attr("href", countyEl.website);
                             $("#county-url").attr("target", "blank");

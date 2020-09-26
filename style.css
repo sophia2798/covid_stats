@@ -6,7 +6,21 @@ body {
     min-height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: rgb(220,231,250,0.5)
+    background: linear-gradient(-45deg, #9caee7, #b0d8e7, #c3dbe4, #a4d0dd);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
 nav {
@@ -93,6 +107,7 @@ footer {
     border: 1px solid rgb(179,182,186);
     border-radius: 5px;
     padding: 1% 2%;
+    background-color: rgb(255,255,255,0.5)
 }
 
 #testing-list {
@@ -150,17 +165,12 @@ tr {
 }
 
 .graph-modal {
-    width: 75%;
-    margin-top: 10%;
+    width: 1000px;
 }
 
 #loc0, #loc1, #loc2, #loc3, #loc4 {
     border-bottom: none;
     padding-left: 0;
-}
-
-#larry-title {
-    color: navy;
 }
 
 h5 {
@@ -169,7 +179,7 @@ h5 {
 
 #clear-btn, #submit-btn {
     box-shadow:inset 0px 1px 0px 0px #dcecfb;
-	background:linear-gradient(to bottom, #bddbfa 5%, #80b5ea 100%);
+	background:rbg(142, 204, 240);
 	background-color:#bddbfa;
 	border-radius:6px;
 	border:1px solid #84bbf3;
@@ -184,9 +194,10 @@ h5 {
 
 #submit-btn {
     position:absolute;
-    padding:0 1%;
+    padding:0;
     top: 25%;
-    height: 50%;
+    height: auto;
+    width: 40px;
     border-radius: 50%;
 }
 
@@ -287,8 +298,10 @@ small {
 }
 
 label {
-    font-size: 10px;
+    font-size: 15px;
     font-weight: bold;
+    /* margin-top: 2%; */
+    color: white
 }
 
 form {
@@ -300,6 +313,7 @@ form {
 input {
     margin-bottom: 0;
     color: white;
+    font-size: 15px;
 }
 
 input[type=text]:not(.browser-default){
@@ -308,12 +322,13 @@ input[type=text]:not(.browser-default){
 
 #search-input-container {
     margin:0 0 1% 0; 
-    height:7%;
+    height:65px;
     position:relative;
 }
 
 #search-history-wrapper {
-    background-image: linear-gradient(to bottom, #dce9f5 5%, #bed9f5 100%);
+    /* background-image: linear-gradient(to bottom, #dce9f5 5%, #bed9f5 100%); */
+    background: rgb(180,215,250,0.5);
     border-radius: 5px;
     padding: 2% 5%;
 }
@@ -324,13 +339,32 @@ input[type=text]:not(.browser-default){
 }
 
 .collection-item {
-    background-color: rgb(255,255,255,0.6) !important;
+    background-color: rgb(255,255,255,0.5) !important;
 }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
 input:-webkit-autofill:active  {
-  transition: background-color 5000s;
-  -webkit-text-fill-color: #fff !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgb(74,110,168,1) inset !important;
+    -webkit-text-fill-color: white !important;
+}
+
+#city-search, #state-search {
+    margin:1% 0;
+}
+
+.card-title {
+    width: 100%;
+    background: rgb(0,0,0,0.5);
+    padding: 0 !important;
+    text-align: center;
+}
+
+.modal-trigger {
+    background: rgb(142, 204, 240)
+}
+
+.container {
+    max-width: 100vw;
 }
