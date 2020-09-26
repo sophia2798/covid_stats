@@ -204,7 +204,7 @@ h5 {
     text-align: center;
 }
 
-/* .large-header {
+.large-header {
     position: relative;
     width: 100%;
     overflow: hidden;
@@ -212,11 +212,15 @@ h5 {
     background-position: center center;
     height: 100%;
     background-image: url("https://www.pcclean.io/wp-content/gallery/hexagon-hd-wallpapers/Hexagon-3.png");
- } */
+    z-index: -3;
+ }
 
-.jumbo {
-    position: relative;
-}
+ .bgback {
+    background-image: linear-gradient(-120deg, #6c3 20%, #09f 20%);
+    opacity: 0.1;
+    z-index: -2;
+    height: 100%;
+ }
 
  .bg {
     animation:slide 3s ease-in-out infinite alternate;
@@ -228,27 +232,25 @@ h5 {
     right:0;
     top:0;
     z-index:-1;
+    overflow: hidden;
+    max-width: 100vw;
   }
   
   .bg2 {
     animation-direction:alternate-reverse;
     animation-duration:4s;
-    left: 0;
-    right: -50%;
-
   }
   
   .bg3 {
-    animation-duration:5s;
-    right: 0;
+    animation-duration:8s;
   }
 
   @keyframes slide {
     0% {
-      transform:translateX(-25%);
+      transform:translateX(-20%);
     }
     100% {
-      transform:translateX(25%);
+      transform:translateX(20%);
     }
   }
 
