@@ -214,18 +214,18 @@ h5 {
     background-image: url("https://www.pcclean.io/wp-content/gallery/hexagon-hd-wallpapers/Hexagon-3.png");
  } */
 
- body {
-    margin:0;
-  }
-  
-  .bg {
+.jumbo {
+    position: relative;
+}
+
+ .bg {
     animation:slide 3s ease-in-out infinite alternate;
     background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
     bottom:0;
-    left:-50%;
+    left:0;
     opacity:.5;
-    position:fixed;
-    right:-50%;
+    position:absolute;
+    right:0;
     top:0;
     z-index:-1;
   }
@@ -233,12 +233,16 @@ h5 {
   .bg2 {
     animation-direction:alternate-reverse;
     animation-duration:4s;
+    left: 0;
+    right: -50%;
+
   }
   
   .bg3 {
     animation-duration:5s;
+    right: 0;
   }
-  
+
   @keyframes slide {
     0% {
       transform:translateX(-25%);
@@ -247,3 +251,4 @@ h5 {
       transform:translateX(25%);
     }
   }
+
