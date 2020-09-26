@@ -6,13 +6,14 @@ body {
     min-height: 100%;
     display: flex;
     flex-direction: column;
+    background-color: rgb(220,231,250,0.5)
 }
 
 nav {
     padding:0 10px;
     line-height: 32px;
     height: 100%;
-    background-color: #85dcb8;
+    background-color: #80b5ea ;
 }
 
 .row::after {
@@ -27,8 +28,8 @@ nav {
 
 #search-card {
     height: 100%;
-    background-color: antiquewhite;
     padding: 3%;
+    padding-top: 1%;
     /* margin: 10px; */
 }
 
@@ -88,16 +89,17 @@ footer {
     text-align: center;
 }
 
-#stats-graph-container, #testing-list, #county-info {
-    border: 1px solid #666;
+#stats-graph-container, #testing-centers, #county-info {
+    border: 1px solid rgb(179,182,186);
     border-radius: 5px;
-    padding: 1%;
+    padding: 1% 2%;
 }
 
 #testing-list {
     margin: 0;
-    padding: 1% 2%;
+    border: none;
 }
+
 
 #img-wrapper, td {
     text-align: center;
@@ -180,6 +182,14 @@ h5 {
 	text-shadow:0px 1px 0px #528ecc
 }
 
+#submit-btn {
+    position:absolute;
+    padding:0 1%;
+    top: 25%;
+    height: 50%;
+    border-radius: 50%;
+}
+
 #clear-btn:hover, #submit-btn:hover {
     background:linear-gradient(to bottom, #80b5ea 5%, #bddbfa 100%);
 	background-color:#80b5ea;
@@ -199,9 +209,16 @@ h5 {
 
 #title {
     position:absolute;
-    top: 50%;
+    top: 25%;
     width: 100%;
     text-align: center;
+    font-size: 35px;
+    color: white;
+    font-weight: bolder;
+}
+
+small {
+    font-size: 50%;
 }
 
 .large-header {
@@ -216,18 +233,18 @@ h5 {
  }
 
  .bgback {
-    background-image: linear-gradient(-120deg, #6c3 20%, #09f 20%);
-    opacity: 0.1;
+    background-image: linear-gradient(to bottom, white, black);
+    opacity: 0.6;
     z-index: -2;
     height: 100%;
  }
 
  .bg {
     animation:slide 3s ease-in-out infinite alternate;
-    background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
+    background-image: linear-gradient(-60deg, rgb(142, 204, 240) 50%, #09f 50%);
     bottom:0;
     left:0;
-    opacity:.5;
+    opacity:.4;
     position:absolute;
     right:0;
     top:0;
@@ -242,7 +259,13 @@ h5 {
   }
   
   .bg3 {
-    animation-duration:8s;
+    animation-duration:5s;
+  }
+
+  .bg4 {
+    animation-direction:alternate-reverse;
+    animation-duration:12s;  
+    background-image: linear-gradient(-150deg, rgb(142, 204, 240) 50%, #09f 50%);
   }
 
   @keyframes slide {
@@ -254,3 +277,60 @@ h5 {
     }
   }
 
+#form-container {
+    margin: 0 auto;
+}
+
+::placeholder {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+label {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+form {
+    height: 100%;
+    background-color: rgb(74,110,168);
+    margin-bottom: 1%;
+}
+
+input {
+    margin-bottom: 0;
+    color: white;
+}
+
+input[type=text]:not(.browser-default){
+    height:2em;
+}
+
+#search-input-container {
+    margin:0 0 1% 0; 
+    height:7%;
+    position:relative;
+}
+
+#search-history-wrapper {
+    background-image: linear-gradient(to bottom, #dce9f5 5%, #bed9f5 100%);
+    border-radius: 5px;
+    padding: 2% 5%;
+}
+
+#search-history {
+    margin-bottom:2%;
+    border-radius: 5px;
+}
+
+.collection-item {
+    background-color: rgb(255,255,255,0.6) !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active  {
+  transition: background-color 5000s;
+  -webkit-text-fill-color: #fff !important;
+}

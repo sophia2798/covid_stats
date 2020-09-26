@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Covid Statistics</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="style.css" />
 </head>
@@ -21,33 +22,44 @@
         </nav>
     </header>
 
+    <!--Jumbotron-->
     <section class="jumbo container demo">
         <div class="large-header">
             <div class="bgback"></div>
             <div class="bg"></div>
             <div class="bg bg2"></div>
             <div class="bg bg3"></div>
-                <p id="title" class="main-title" style="margin-top:0">COVID-19 Information Search <br><small>Input your desired city name and associated state code to view COVID-19 information from that location.</small></p>
+            <div class="bg bg4"></div>
+                <p id="title" class="main-title" style="margin-top:0">COVID-19 Information Search <br><small>Input your desired city name and associated state code to view COVID-19 information from that location</small></p>
         </div>   
+    </section>
+
+    <!--Search Input Bar-->
+    <section class="row" id="search-input-container">
+        <form class="col s12">
+            <div class="row" id="form-container">
+                <div class="col s2"></div>
+                <div class="col s8">
+                <div class="input-field col s6">
+                    <input placeholder="City Name" id="city-search" type="text" class="validate">
+                    <label for="city-search">City Search</label>
+                </div>
+                <div class="input-field col s4">
+                    <input placeholder="State Name" id="state-search" type="text" class="validate">
+                    <label for="state-search">State Search</label>
+                </div>
+                <div class="col s2">
+                    <button id="submit-btn"><i class="material-icons">search</i></button>
+                </div>                        
+                </div>
+                <div class="col s2"></div>
+            </div>
+        </form>
     </section>
 
     <main class="row" class="col s12" id="main-container">
         <aside id="search-card" class="col s4">
             <div class="row">
-                <form class="col s12">
-                    <div class="row">
-                        <div class="input-field col s8">
-                            <input placeholder="City Name" id="city-search" type="text" class="validate">
-                            <label for="city-search">City Search</label>
-                        </div>
-                        <div class="input-field col s4">
-                            <input placeholder="State Name" id="state-search" type="text" class="validate">
-                            <label for="state-search">State Search</label>
-                        </div>
-                        <button id="submit-btn">Search</button>
-                    </div>
-                </form>
-
                 <!-- Modal -->
                 <div class="modal error-modal">
                     <div class="modal-content">
@@ -56,8 +68,8 @@
                     </div>
                 </div>
 
-                <article id="search-history">
-                    <h6>Search History</h6>
+                <article id="search-history-wrapper">
+                    <h6 style="padding:0 1%; font-weight:bold">Search History</h6>
                     <ul class="collection" id="search-history">
                         <li id="hist0" class="collection-item">&nbsp</li>
                         <li id="hist1" class="collection-item">&nbsp</li>
@@ -101,13 +113,13 @@
                 </article>
             </div>
             <article class="row" id="testing-centers">
-                <ul class="collection with-header" id="testing-list">
-                        <h5>Testing Centers</h5>
-                    <li class="collection-item" id="loc0">&nbsp</li>
-                    <li class="collection-item" id="loc1">&nbsp</li>
-                    <li class="collection-item" id="loc2">&nbsp</li>
-                    <li class="collection-item" id="loc3">&nbsp</li>
-                    <li class="collection-item" id="loc4">&nbsp</li>
+                <h5>Testing Centers</h5><br>
+                <ul id="testing-list" class="with-header">
+                    <li class="defaultlist" id="loc0">&nbsp</li><br>
+                    <li class="defaultlist" id="loc1">&nbsp</li><br>
+                    <li class="defaultlist" id="loc2">&nbsp</li><br>
+                    <li class="defaultlist" id="loc3">&nbsp</li><br>
+                    <li class="defaultlist" id="loc4">&nbsp</li>
                 </ul>
             </article>
             <section class="row" id="county-info">
