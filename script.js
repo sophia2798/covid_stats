@@ -10,7 +10,7 @@ $(document).ready(function () {
     // When user clicks city, state in history, display info regarding that city and state
     $(document).on("click", ".collection-item", function (event) {
         event.preventDefault();
-
+        $(".modal-trigger").show();
         // Get the ID of city that user clicks
         var cityID = event.target.id;
 
@@ -28,23 +28,6 @@ $(document).ready(function () {
 
     // When user clicks the search button, call storeInput()
     $("#submit-btn").on("click", storeInput);
-
-
-    // $("#submit-btn").on("click", function (event) {
-    //     event.preventDefault();
-    //     // Assign variables to input values
-    //     var cityName = ($("#city-search").val()).toLowerCase().trim();
-    //     var stateName = ($("#state-search").val()).toUpperCase();
-    //     var fullStateName = getFullState(stateName);
-    //     // console.log(cityName, stateName, fullStateName)
-    //     $("input").val("");
-
-    //     if (cityName.length > 0 && stateName.length === 2 && checkCityState(cityName, stateName)) {
-    //     if (cityName.length > 0 && stateName.length === 2) {
-    //         $(".modal-trigger").show();
-    //         ajaxCalls(cityName, stateName, fullStateName);
-    //     }
-    // });
 
     // When user clicks the clear button, clear search history
     $("#clear-btn").on("click", function () {
@@ -67,7 +50,6 @@ $(document).ready(function () {
 
         // Display local storage city and state to history, format: Seattle, WA
         storageCityArray.forEach(function (cityEl, index) {
-            // $("#hist" + index).css("display", "block");
             $("#hist" + index).text(cityEl + ", " + storageStateArray[index]);
         });
 
@@ -81,13 +63,10 @@ $(document).ready(function () {
         // Check input validity
         var cityInput = $("#city-search").val().trim();
         var stateInput = $("#state-search").val().trim();
-        // var result = true;
 
         var cityName = ($("#city-search").val()).toLowerCase().trim();
         var stateName = ($("#state-search").val()).toUpperCase();
         var fullStateName = getFullState(stateName);
-        // console.log(cityName, stateName, fullStateName)
-        // $("input").val("");
 
         // Display modal with error messages
         if (cityInput === "" && stateInput === "") {
@@ -122,7 +101,6 @@ $(document).ready(function () {
                     console.log("result: ", result);
                 }
 
-                // console.log(result);
                 if (result) {
 
                     var storageCityArray = JSON.parse(localStorage.getItem("storageCity")) || [];
@@ -198,6 +176,7 @@ $(document).ready(function () {
 
     function ajaxCalls(cityName, stateName, fullStateName) {
         // Lon and Lat API Call
+        console.log(cityName,stateName,fullStateName);
         $.ajax({
             url: "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "," + fullStateName + "&appid=e0b82fbe866155125ec89e15985f0d60",
             method: "GET"
@@ -221,7 +200,7 @@ $(document).ready(function () {
                     var address = testingCenterResponse.items[i].address.label.split(":")[1];
 
                     // $("#loc" + i).css("display", "block");
-                    $("#loc" + i).text(address);
+                    $("#loc" + i).html("<span><i class='tiny material-icons'>add_location</i></span>&nbsp"+address);
 
                 }
 
@@ -253,6 +232,7 @@ $(document).ready(function () {
                             $("#county-address").text(countyEl.address);
                             $("#county-url").text("Website");
                             $("#county-url").attr("href", countyEl.website);
+                            $("#county-url").attr("target", "blank");
                         }
                     });
                 });
@@ -307,18 +287,18 @@ $(document).ready(function () {
                 }
                 return avgArr;
             };
-
-            var m1 = monthly(0, 29);
-            var m2 = monthly(30, 59);
-            var m3 = monthly(60, 89);
-            var m4 = monthly(90, 119);
-            var m5 = monthly(120, 149);
-            var m6 = monthly(150, 179);
-            var nest = [m1, m2, m3, m4, m5, m6];
-
-            function categorize(cat, index) {
-                for (var j = 0; j < 6; j++) {
-                    cat.unshift(nest[j][index]);
+    
+            var m1 = monthly(0,29);
+            var m2 = monthly(30,59);
+            var m3 = monthly(60,89);
+            var m4 = monthly(90,119);
+            var m5 = monthly(120,149);
+            var m6 = monthly(150,179);
+            var nest = [m1,m2,m3,m4,m5,m6];
+    
+            function categorize(cat,index) {
+                for (var j=0;j<6;j++) {
+                    cat.push(nest[j][index]);
                 }
                 return cat;
             }
