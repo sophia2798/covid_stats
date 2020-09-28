@@ -2,7 +2,6 @@
 $(document).ready(function () {
     // Call modal
     $('.modal').modal();
-    // M.updateTextFields();
 
     // Display city history on loading
     displayHistory();
@@ -21,8 +20,8 @@ $(document).ready(function () {
         var cityName = JSON.parse(localStorage.getItem("storageCity"))[cityIndex];
         var stateName = JSON.parse(localStorage.getItem("storageState"))[cityIndex];
 
-        // Call APIs
         $(".modal-trigger").show();
+        // Call APIs
         ajaxCalls(cityName, stateName, getFullState(stateName));
     });
 
@@ -60,6 +59,7 @@ $(document).ready(function () {
         event.preventDefault();
 
         var maxLength = 5;
+
         // Check input validity
         var cityInput = $("#city-search").val().trim();
         var stateInput = $("#state-search").val().trim();
@@ -96,9 +96,7 @@ $(document).ready(function () {
             checkCityState(cityInput, stateInput, function (correctState) {
 
                 if (correctState != stateInput) {
-                    console.log("check false");
                     result = false;
-                    console.log("result: ", result);
                 }
 
                 if (result) {
@@ -126,15 +124,15 @@ $(document).ready(function () {
 
                         }
 
-                        // Set the new array to local storage
-                        localStorage.setItem("storageCity", JSON.stringify(storageCityArray));
-                        localStorage.setItem("storageState", JSON.stringify(storageStateArray));
-
-                        displayHistory();
-                        $(".modal-trigger").show();
-                        ajaxCalls(cityName, stateName, fullStateName);
-
                     }
+                    // Set the new array to local storage
+                    localStorage.setItem("storageCity", JSON.stringify(storageCityArray));
+                    localStorage.setItem("storageState", JSON.stringify(storageStateArray));
+
+                    displayHistory();
+                    $(".modal-trigger").show();
+                    ajaxCalls(cityName, stateName, fullStateName);
+
                 } else {
                     $("#error-message").text("Please check the state code.");
                     displayModal();
@@ -176,12 +174,11 @@ $(document).ready(function () {
 
     function ajaxCalls(cityName, stateName, fullStateName) {
         // Lon and Lat API Call
-        console.log(cityName,stateName,fullStateName);
         $.ajax({
             url: "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "," + fullStateName + "&appid=e0b82fbe866155125ec89e15985f0d60",
             method: "GET"
         }).then(function (response) {
-            // console.log(response);
+
             var cityLatitude = response.coord.lat;
             var cityLongitude = response.coord.lon;
 
@@ -194,13 +191,12 @@ $(document).ready(function () {
                 url: testingCenterURL,
                 method: "GET"
             }).then(function (testingCenterResponse) {
-                // console.log(testingCenterResponse);
+
                 for (var i = 0; i < resultLimit; i++) {
 
                     var address = testingCenterResponse.items[i].address.label.split(":")[1];
 
-                    // $("#loc" + i).css("display", "block");
-                    $("#loc" + i).html("<span><i class='tiny material-icons'>add_location</i></span>&nbsp"+address);
+                    $("#loc" + i).html("<span><i class='tiny material-icons'>add_location</i></span>&nbsp" + address);
 
                 }
 
@@ -222,8 +218,7 @@ $(document).ready(function () {
                     url: healthDeptURL,
                     method: "GET"
                 }).then(function (response) {
-                    // console.log(countyName);
-                    // console.log(response);
+
                     response.forEach(function (countyEl) {
                         if (countyEl.name.includes(countyName)) {
                             // Display county info
@@ -245,10 +240,10 @@ $(document).ready(function () {
             url: stateURL,
             method: "GET"
         }).then(function (response) {
-            // console.log(response);
+
             var dateString = response.date;
             var dateFormat = moment(dateString, "YYYYMMDD").format('MMMM Do YYYY');
-            // console.log(dateFormat)
+
             var totalTested = (response.totalTestResults).toLocaleString('en');
             var totalPos = (response.positive).toLocaleString('en');
             var totalNeg = (response.negative).toLocaleString('en');
@@ -261,7 +256,7 @@ $(document).ready(function () {
             $("#hospitalized").text(currentHosp);
             $("#deaths").text(deaths);
             $("#update-date").text(dateFormat);
-            // console.log(totalTested, totalPos, totalNeg, currentHosp, deaths);
+
         });
 
         $.ajax({
@@ -287,17 +282,17 @@ $(document).ready(function () {
                 }
                 return avgArr;
             };
-    
-            var m1 = monthly(0,29);
-            var m2 = monthly(30,59);
-            var m3 = monthly(60,89);
-            var m4 = monthly(90,119);
-            var m5 = monthly(120,149);
-            var m6 = monthly(150,179);
-            var nest = [m1,m2,m3,m4,m5,m6];
-    
-            function categorize(cat,index) {
-                for (var j=0;j<6;j++) {
+
+            var m1 = monthly(0, 29);
+            var m2 = monthly(30, 59);
+            var m3 = monthly(60, 89);
+            var m4 = monthly(90, 119);
+            var m5 = monthly(120, 149);
+            var m6 = monthly(150, 179);
+            var nest = [m1, m2, m3, m4, m5, m6];
+
+            function categorize(cat, index) {
+                for (var j = 0; j < 6; j++) {
                     cat.push(nest[j][index]);
                 }
                 return cat;
@@ -306,7 +301,7 @@ $(document).ready(function () {
             negPts = categorize(negPts, 0);
             posPts = categorize(posPts, 1);
             deadPts = categorize(deadPts, 2);
-            // console.log(negPts,posPts,deadPts);
+
 
             function lastSixMonths() {
                 var current = moment().format('MMMM');
@@ -368,13 +363,10 @@ $(document).ready(function () {
         var cityUC = "";
 
         cityToChange = cityToChange.split(" ");
-        // console.log(cityToChange);
         cityToChange.forEach(function (cityPart) {
-            // console.log("before: ", cityPart);
             cityPart = cityPart.charAt(0).toUpperCase() + cityPart.slice(1);
-            // console.log("after: ", cityPart);
             cityUC = cityUC + " " + cityPart;
-            // console.log(cityUC);
+
         });
         return cityUC.trim();
     }
