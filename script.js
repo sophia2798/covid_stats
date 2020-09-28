@@ -126,15 +126,15 @@ $(document).ready(function () {
 
                         }
 
+                    }
+
                         // Set the new array to local storage
                         localStorage.setItem("storageCity", JSON.stringify(storageCityArray));
                         localStorage.setItem("storageState", JSON.stringify(storageStateArray));
-
                         displayHistory();
                         $(".modal-trigger").show();
                         ajaxCalls(cityName, stateName, fullStateName);
 
-                    }
                 } else {
                     $("#error-message").text("Please check the state code.");
                     displayModal();
