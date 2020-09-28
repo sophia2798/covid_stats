@@ -156,7 +156,7 @@ $(document).ready(function () {
 
         var fullStateName = getFullState(stateToCompare);
         $.ajax({
-            url: "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "," + fullStateName + "&appid=e0b82fbe866155125ec89e15985f0d60",
+            url: "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "," + fullStateName + "&appid=e0b82fbe866155125ec89e15985f0d60",
             method: "GET"
         }).then(function (response) {
             var testingCenterKey = "aUGtjGfxYZm_i4czjxJiqasqeMEkhvjaRig_VG6cUtA";
@@ -178,7 +178,7 @@ $(document).ready(function () {
         // Lon and Lat API Call
         console.log(cityName,stateName,fullStateName);
         $.ajax({
-            url: "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "," + fullStateName + "&appid=e0b82fbe866155125ec89e15985f0d60",
+            url: "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "," + fullStateName + "&appid=e0b82fbe866155125ec89e15985f0d60",
             method: "GET"
         }).then(function (response) {
             // console.log(response);
