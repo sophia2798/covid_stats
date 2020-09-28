@@ -2,6 +2,7 @@
 $(document).ready(function () {
     // Call modal
     $('.modal').modal();
+    // M.updateTextFields();
 
     // Display city history on loading
     displayHistory();
@@ -9,7 +10,7 @@ $(document).ready(function () {
     // When user clicks city, state in history, display info regarding that city and state
     $(document).on("click", ".collection-item", function (event) {
         event.preventDefault();
-
+        $(".modal-trigger").show();
         // Get the ID of city that user clicks
         var cityID = event.target.id;
 
@@ -21,27 +22,12 @@ $(document).ready(function () {
         var stateName = JSON.parse(localStorage.getItem("storageState"))[cityIndex];
 
         // Call APIs
+        $(".modal-trigger").show();
         ajaxCalls(cityName, stateName, getFullState(stateName));
     });
 
     // When user clicks the search button, call storeInput()
     $("#submit-btn").on("click", storeInput);
-
-    //
-    $("#submit-btn").on("click", function (event) {
-        event.preventDefault();
-        // Assign variables to input values
-        var cityName = ($("#city-search").val()).toLowerCase().trim();
-        var stateName = ($("#state-search").val()).toUpperCase();
-        var fullStateName = getFullState(stateName);
-        // console.log(cityName, stateName, fullStateName)
-        $("input").val("");
-
-        if (cityName.length > 0 && stateName.length === 2) {
-            $(".modal-trigger").show();
-            ajaxCalls(cityName, stateName, fullStateName);
-        }
-    });
 
     // When user clicks the clear button, clear search history
     $("#clear-btn").on("click", function () {
@@ -55,7 +41,7 @@ $(document).ready(function () {
         }
 
     });
-    
+
     function displayHistory() {
 
         // Check if local storage is empty
@@ -64,7 +50,6 @@ $(document).ready(function () {
 
         // Display local storage city and state to history, format: Seattle, WA
         storageCityArray.forEach(function (cityEl, index) {
-            // $("#hist" + index).css("display", "block");
             $("#hist" + index).text(cityEl + ", " + storageStateArray[index]);
         });
 
@@ -79,61 +64,84 @@ $(document).ready(function () {
         var cityInput = $("#city-search").val().trim();
         var stateInput = $("#state-search").val().trim();
 
+        var cityName = ($("#city-search").val()).toLowerCase().trim();
+        var stateName = ($("#state-search").val()).toUpperCase();
+        var fullStateName = getFullState(stateName);
+
         // Display modal with error messages
         if (cityInput === "" && stateInput === "") {
             $("#error-message").text("Please enter a city and a state.");
             displayModal();
 
-        } else if (cityInput === "" && stateInput.length > 0) {
+        } else if (cityInput === "" && stateInput.length === 2) {
             $("#error-message").text("Please enter a city.");
+            $("#state-search").val(stateInput);
             displayModal();
 
         } else if (cityInput.length > 0 && stateInput === "") {
             $("#error-message").text("Please enter a state code.");
+            $("#city-input").val(cityInput);
             displayModal();
 
         } else if (cityInput.length > 0 && stateInput.length != 2) {
             $("#error-message").text("Please enter a correct state code.");
             displayModal();
+
         } else {
             // Change to uppercase
             cityInput = cityToUpperCase(cityInput);
             stateInput = stateInput.toUpperCase();
 
-            var storageCityArray = JSON.parse(localStorage.getItem("storageCity")) || [];
-            var storageStateArray = JSON.parse(localStorage.getItem("storageState")) || [];
-            
-            // If the user input is not in city history
-            if (storageCityArray.indexOf(cityInput) === -1) {
-                
-                // If the length of city array is less than max allowable length
-                if (storageCityArray.length < maxLength) {
-    
-                    // Add city and state to the end of array
-                    storageCityArray.push(cityInput);
-                    storageStateArray.push(stateInput);
-    
-                } else {
-                    
-                    // Otherwise delete the first city, state then add input to the end of array
-                    storageCityArray.shift();
-                    storageStateArray.shift();
-                    storageCityArray.push(cityInput);
-                    storageStateArray.push(stateInput);
-    
+            var result = true;
+            checkCityState(cityInput, stateInput, function (correctState) {
+
+                if (correctState != stateInput) {
+                    console.log("check false");
+                    result = false;
+                    console.log("result: ", result);
                 }
 
-                // Set the new array to local storage
-                localStorage.setItem("storageCity", JSON.stringify(storageCityArray));
-                localStorage.setItem("storageState", JSON.stringify(storageStateArray));
-                
-                displayHistory();
-    
-            } 
+                if (result) {
 
+                    var storageCityArray = JSON.parse(localStorage.getItem("storageCity")) || [];
+                    var storageStateArray = JSON.parse(localStorage.getItem("storageState")) || [];
+
+                    // If the user input is not in city history
+                    if (storageCityArray.indexOf(cityInput) === -1) {
+
+                        // If the length of city array is less than max allowable length
+                        if (storageCityArray.length < maxLength) {
+
+                            // Add city and state to the end of array
+                            storageCityArray.push(cityInput);
+                            storageStateArray.push(stateInput);
+
+                        } else {
+
+                            // Otherwise delete the first city, state then add input to the end of array
+                            storageCityArray.shift();
+                            storageStateArray.shift();
+                            storageCityArray.push(cityInput);
+                            storageStateArray.push(stateInput);
+
+                        }
+
+                        // Set the new array to local storage
+                        localStorage.setItem("storageCity", JSON.stringify(storageCityArray));
+                        localStorage.setItem("storageState", JSON.stringify(storageStateArray));
+
+                        displayHistory();
+                        $(".modal-trigger").show();
+                        ajaxCalls(cityName, stateName, fullStateName);
+
+                    }
+                } else {
+                    $("#error-message").text("Please check the state code.");
+                    displayModal();
+                    return;
+                }
+            });
         }
-
-
     }
 
     function displayModal() {
@@ -143,6 +151,29 @@ $(document).ready(function () {
         });
     }
 
+    // Check if user input city and state are a matching
+    function checkCityState(cityName, stateToCompare, callBackFn) {
+
+        var fullStateName = getFullState(stateToCompare);
+        $.ajax({
+            url: "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "," + fullStateName + "&appid=e0b82fbe866155125ec89e15985f0d60",
+            method: "GET"
+        }).then(function (response) {
+            var testingCenterKey = "aUGtjGfxYZm_i4czjxJiqasqeMEkhvjaRig_VG6cUtA";
+            var resultLimit = 1;  // Limit to 1 result
+            var testingCenterURL = "https://discover.search.hereapi.com/v1/discover?apikey=" + testingCenterKey + "&q=Covid&at=" + response.coord.lat + "," + response.coord.lon + "&limit=" + resultLimit;
+
+            $.ajax({
+                url: testingCenterURL,
+                method: "GET"
+            }).then(function (testingCenterResponse) {
+                var correctState = testingCenterResponse.items[0].address.stateCode;
+                callBackFn(correctState);
+            });
+        });
+
+    }
+
     function ajaxCalls(cityName, stateName, fullStateName) {
         // Lon and Lat API Call
         console.log(cityName,stateName,fullStateName);
@@ -150,6 +181,7 @@ $(document).ready(function () {
             url: "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "," + fullStateName + "&appid=e0b82fbe866155125ec89e15985f0d60",
             method: "GET"
         }).then(function (response) {
+            // console.log(response);
             var cityLatitude = response.coord.lat;
             var cityLongitude = response.coord.lon;
 
@@ -162,13 +194,13 @@ $(document).ready(function () {
                 url: testingCenterURL,
                 method: "GET"
             }).then(function (testingCenterResponse) {
-
+                // console.log(testingCenterResponse);
                 for (var i = 0; i < resultLimit; i++) {
 
                     var address = testingCenterResponse.items[i].address.label.split(":")[1];
 
                     // $("#loc" + i).css("display", "block");
-                    $("#loc" + i).text(address);
+                    $("#loc" + i).html("<span><i class='tiny material-icons'>add_location</i></span>&nbsp"+address);
 
                 }
 
