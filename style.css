@@ -241,7 +241,7 @@ small {
     height: 100%;
     background-image: url("https://www.pcclean.io/wp-content/gallery/hexagon-hd-wallpapers/Hexagon-3.png");
     z-index: -3;
- }
+}
 
  .bgback {
     background-image: linear-gradient(to bottom, white, black);
@@ -279,14 +279,14 @@ small {
     background-image: linear-gradient(-150deg, rgb(142, 204, 240) 50%, #09f 50%);
   }
 
-  @keyframes slide {
+@keyframes slide {
     0% {
       transform:translateX(-20%);
     }
     100% {
       transform:translateX(20%);
     }
-  }
+}
 
 #form-container {
     margin: 0 auto;
@@ -367,6 +367,8 @@ input:-webkit-autofill:active  {
 
 .container {
     max-width: 100vw;
+}
+
 .card-content {
     height: 200px;
     overflow: hidden;
